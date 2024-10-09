@@ -1,0 +1,9 @@
+{
+    "name": "neo4j-graph-query",
+    "version": "1.0.0",
+    "description": "AnythingLLM plugin for querying Neo4j databases",
+    "main": "handler.js",
+    "dependencies": {
+      "neo4j-driver": "^5.25.0"
+    }
+  }

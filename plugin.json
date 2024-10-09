@@ -1,0 +1,86 @@
+{
+  "active": true,
+  "hubId": "neo4j-graph-query",
+  "name": "Neo4j Graph Query",
+  "schema": "skill-1.0.0",
+  "version": "1.0.3",
+  "description": "The Neo4j agent is responsible for querying and managing data stored in a Neo4j graph database. All database operations must be performed through the agent to ensure data integrity. The agent will: execute Cypher queries on the Neo4j database and return results, format input data according to the application schema before database updates, present formatted data to the user and obtain approval before changes, update the database by executing Cypher queries, verify updates by re-querying the database and returning results, handle errors by attempting alternative queries or providing clear errors. The agent requires user confirmation for any database changes. It will never modify data without explicit permission.",
+  "author": "Robert Sigler <code@sigler.io>",
+  "author_url": "https://github.com/rmrfslashbin",
+  "license": "MIT",
+  "setup_args": {
+    "NEO4J_URI": {
+      "type": "string",
+      "required": true,
+      "input": {
+        "type": "text",
+        "default": "bolt://localhost:7687",
+        "placeholder": "bolt://localhost:7687",
+        "hint": "The URI of your Neo4j database"
+      }
+    },
+    "NEO4J_USER": {
+      "type": "string",
+      "required": true,
+      "input": {
+        "type": "text",
+        "default": "neo4j",
+        "placeholder": "neo4j",
+        "hint": "Your Neo4j username"
+      }
+    },
+    "NEO4J_PASSWORD": {
+      "type": "string",
+      "required": true,
+      "input": {
+        "type": "password",
+        "default": "",
+        "placeholder": "Your Neo4j password",
+        "hint": "Your Neo4j password"
+      }
+    }
+  },
+  "examples": [
+    {
+      "prompt": "Find all nodes in the graph",
+      "call": "{\"query\": \"MATCH (n) RETURN n\"}"
+    },
+    {
+      "prompt": "Create a new node and verify",
+      "call": [
+        "{\"query\": \"CREATE (n:Label {prop: 'value'}) RETURN n\"}",
+        "{\"query\": \"MATCH (n:Label {prop: 'value'}) RETURN n\"}"
+      ]
+    },
+    {
+      "prompt": "Update a node property and verify",
+      "call": [
+        "{\"query\": \"MATCH (n:Label) SET n.prop = 'newValue' RETURN n\"}",
+        "{\"query\": \"MATCH (n:Label) RETURN n\"}"
+      ]
+    },
+    {
+      "prompt": "Create a relationship and verify",
+      "call": [
+        "{\"query\": \"MATCH (a), (b) CREATE (a)-[r:REL]->(b) RETURN r\"}",
+        "{\"query\": \"MATCH (a)-[r:REL]->(b) RETURN r\"}"
+      ]
+    },
+    {
+      "prompt": "Delete a node and relationships",
+      "call": [
+        "{\"query\": \"MATCH (n) DELETE n\"}"
+      ]
+    }
+  ],
+  "entrypoint": {
+    "file": "handler.js",
+    "params": {
+      "query": {
+        "description": "The Cypher query to execute",
+        "type": "string"
+      }
+    }
+  },
+  "imported": true
+}
